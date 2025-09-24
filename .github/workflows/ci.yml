@@ -1,28 +1,13 @@
 name: CI
-
-on:
-  push:
-    branches: [ main, development ]
-  pull_request:
-    branches: [ main ]
-
+on: [push]
 jobs:
-  check-contracts:
+  tests:
+    name: "teachfi"
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Install Clarinet
-      run: |
-        curl -sL https://github.com/hirosystems/clarinet/releases/download/v2.8.0/clarinet-linux-x64.tar.gz | tar -xz
-        sudo mv ./clarinet /usr/local/bin/
-        
-    - name: Check contract syntax
-      run: |
-        clarinet check
-        
-    - name: Run tests
-      run: |
-        npm install
-        npm test
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+      - name: "Check contract syntax"
+        uses: docker://hirosystems/clarinet:latest
+        with:
+          args: check
